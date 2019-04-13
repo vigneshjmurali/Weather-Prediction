@@ -1,0 +1,55 @@
+---
+title: "Imputation"
+author: "Vignesh J Muralidharan"
+date: "March 21, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+weather = read.csv("https://raw.githubusercontent.com/vigneshjmurali/Weather-Prediction-in-World-Cities/master/Weather.csv")
+str(weather)
+
+table(weather$events)
+sum(is.na(weather$events))
+View(weather)
+weather[is.na(weather$events)]<-0
+```
+
+data$field=recode(data$field,"'bilingual education'"="Education")
+
+```{r}
+data=read.csv("dataset_final.csv")
+attach(data)
+plot(data$date,data$events)
+data2013_y1<-data.frame(data2013[,c(1:27)])
+auc_2016=data.frame(data[c(1:366),])
+plot(auc_2016$date,auc_2016$events)
+ library(MASS)
+parcoord(auc_2016)
+
+hist(auc_2016$events)
+
+auc_2016=data.frame(data[c(1:366),])
+plot(auc_2016$date,auc_2016$avg_temp,main = "Average Temperature in Auckland_2016")
+
+beg_2016=data.frame(data[c(1463:1828),])
+
+Mum=data.frame(data[c(732:1097),])
+plot(beg_2016$events,beg_2016$month,main="Weather Events in each month at Mumbai_2016")
+plot(data$date,data$avg_temp, main = "Date vs Average temperature in all Cities for 2016 & 2017")
+
+boxplot(Mum$events,Mum$avg_temp)
+
+
+boxplot(city,events,data=data)
+boxplot(data$date,data$events)
+library(ggplot2)
+data$city = factor(data$city)
+ggplot(data, aes(x=city, y=`events`,colour=city)) +
+  geom_boxplot()
+```
+
