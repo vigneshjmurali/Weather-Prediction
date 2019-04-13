@@ -7,13 +7,12 @@ METADATA (DUBLIN CORE STANDARD – ORIGINAL DATASET)
 •	Digital Object Identifier (DOI) Number: The data was not published 
 
 •	Title / DOI Related Article: Evidence of weather conditions for different cities for the year 2016 - 2017
-
 •	Variable info link:  https://vincentarelbundock.github.io/Rdatasets/doc/mosaicData/Weather.html
 •	Creator: The creator was not available
 •	Publisher: Not published yet
 •	Date Published: not given 
 •	Date Downloaded in computer: 17th Mar 2019
-•	Source: Dataset https://vincentarelbundock.github.io/Rdatasets/datasets.html?fbclid=IwAR1a_0LfN4gf5mQjCyOacu3ucqQ1jZvlu7Tz1pd5atiLtslBQhc9QSCKyFE 
+•	Source: Dataset https://vincentarelbundock.github.io/Rdatasets/datasets.htmlfbclid=IwAR1a_0LfN4gf5mQjCyOacu3ucqQ1jZvlu7Tz1pd5atiLtslBQhc9QSCKyFE 
 •	Type: Metadata (.doc or .pdf), Dataset (.Xlsx, .CSV, .PPT)
 •	Language: English
 •	Dimension of the actual dataset: 3655 (Observations) & 25 (Variables)
