@@ -1,0 +1,541 @@
+---
+title: "Imputation"
+author: "Vignesh J Muralidharan"
+date: "March 21, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+weather = read.csv("https://raw.githubusercontent.com/vigneshjmurali/Weather-Prediction/master/dataset_final.csv")
+str(weather)
+
+table(weather$events)
+sum(is.na(weather$events))
+View(weather)
+weather[is.na(weather$events)]<-0
+```
+
+data$field=recode(data$field,"'bilingual education'"="Education")
+
+```{r}
+data=read.csv("dataset_final.csv")
+attach(data)
+plot(data$date,data$events)
+data2013_y1<-data.frame(data2013[,c(1:27)])
+auc_2016=data.frame(data[c(1:366),c(3,8)])
+plot(auc_2016$date,auc_2016$events)
+ library(MASS)
+parcoord(auc_2016)
+
+hist(auc_2016$events)
+
+auc_2016=data.frame(data[c(1:366),])
+plot(auc_2016$date,auc_2016$avg_temp,main = "Average Temperature in Auckland_2016")
+
+beg_2016=data.frame(data[c(1463:1828),])
+
+Mum=data.frame(data[c(732:1097),])
+plot(beg_2016$events,beg_2016$month,main="Weather Events in each month at Mumbai_2016")
+plot(data$date,data$avg_temp, main = "Date vs Average temperature in all Cities for 2016 & 2017")
+
+boxplot(Mum$events,Mum$avg_temp)
+
+
+boxplot(city,events,data=data)
+boxplot(data$date,data$events)
+library(ggplot2)
+data$city = factor(data$city)
+ggplot(data, aes(x=city, y=`events`,colour=city)) +
+  geom_boxplot()
+```
+
+```{r}
+csdata<-read.csv("dataset_final.csv")
+auc_201617=data.frame(csdata[c(1:731),c(5,8)])
+auc_201617$date=as.Date(auc_201617$date)
+library(googleVis)
+#AUCKLAND
+Cal_auc <- gvisCalendar(auc_201617, 
+                    datevar="date", 
+                    numvar="avg_temp",
+                    options=list(
+                      title="Daily temperature in Auckland",
+                      height=320,
+                      calendar="{yearLabel: { fontName: 'Times-Roman',
+                               fontSize: 32, color: 'c69c6e', bold: true},
+                               cellSize: 10,
+                               cellColor: { stroke: 'blue', strokeOpacity: 0.2 },
+                               focusedCellColor: {stroke:'orange'}}")
+                    
+)
+plot(Cal_auc)
+
+#MUMBAI
+mum_201617=data.frame(csdata[c(732:1462),c(5,8)])
+mum_201617$date=as.Date(mum_201617$date)
+library(googleVis)
+
+Cal_mum <- gvisCalendar(mum_201617, 
+                    datevar="date", 
+                    numvar="avg_temp",
+                    options=list(
+                      title="Daily temperature in Mumbai",
+                      height=320,
+                      calendar="{yearLabel: { fontName: 'Times-Roman',
+                               fontSize: 32, color: '#1A8763', bold: true},
+                               cellSize: 10,
+                               cellColor: { stroke: 'red', strokeOpacity: 0.2 },
+                               focusedCellColor: {stroke:'red'}}")
+)
+plot(Cal_mum)
+#BEIJING
+bei_201617=data.frame(csdata[c(1463:2193),c(5,8)])
+bei_201617$date=as.Date(bei_201617$date)
+library(googleVis)
+
+Cal_bei <- gvisCalendar(bei_201617, 
+                    datevar="date", 
+                    numvar="avg_temp",
+                    options=list(
+                      title="Daily temperature in Beijing",
+                      height=320,
+                      calendar="{yearLabel: { fontName: 'Times-Roman',
+                               fontSize: 32, color: '#1A8763', bold: true},
+                               cellSize: 10,
+                               cellColor: { stroke: 'red', strokeOpacity: 0.2 },
+                               focusedCellColor: {stroke:'red'}}")
+)
+plot(Cal_bei)
+#CHICAGO
+chi_201617=data.frame(csdata[c(2194:2924),c(5,8)])
+chi_201617$date=as.Date(chi_201617$date)
+library(googleVis)
+
+Cal_chi <- gvisCalendar(chi_201617, 
+                    datevar="date", 
+                    numvar="avg_temp",
+                    options=list(
+                      title="Daily temperature in Chicago",
+                      height=320,
+                      calendar="{yearLabel: { fontName: 'Times-Roman',
+                               fontSize: 32, color: '#1A8763', bold: true},
+                               cellSize: 10,
+                               cellColor: { stroke: 'red', strokeOpacity: 0.2 },
+                               focusedCellColor: {stroke:'red'}}")
+)
+plot(Cal_chi)
+#SAN DIEGO
+san_201617=data.frame(csdata[c(2925:3655),c(5,8)])
+san_201617$date=as.Date(san_201617$date)
+library(googleVis)
+
+Cal_san <- gvisCalendar(san_201617, 
+                    datevar="date", 
+                    numvar="avg_temp",
+                    options=list(
+                      title="Daily temperature in SanDiego",
+                      height=320,
+                      calendar="{yearLabel: { fontName: 'Times-Roman',
+                               fontSize: 32, color: '#1A8763', bold: true},
+                               cellSize: 10,
+                               cellColor: { stroke: 'red', strokeOpacity: 0.2 },
+                               focusedCellColor: {stroke:'red'}}")
+)
+plot(Cal_san)
+
+```
+
+###############
+AUCKLAND 16 & 17
+#################
+```{r}
+par(mfrow=c(2,2))
+library(viridis)     ## color palette
+library(ggjoy)       ## ridges
+library(hrbrthemes)  ## plot theme
+library(ggplot2)
+#AUCKLAND_16
+months <- c("December","November","October","September","August","July","June","May","April","March","February","January") ## need this string vector for sorting later
+auc_2016=data.frame(csdata[c(1:366),c(5,7,8,9)])
+auc_2016$date=as.Date(auc_2016$date)
+auc_2016$months <- as.Date(auc_2016$date, format = "%d-%b-%y") %>%
+  months() %>%
+  as.factor() %>%
+  factor(., levels = months)
+
+#scales
+mins <- min(auc_2016$low_temp)
+maxs <- max(auc_2016$high_temp)
+
+## black and white
+ggplot(auc_2016,aes(x = avg_temp,y=months,height=..density..))+
+  geom_joy(scale=3) +
+  scale_x_continuous(limits = c(mins,maxs))+
+  theme_ipsum(grid=F)+
+  theme(axis.title.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        strip.text.y = element_text(angle = 180, hjust = 1))+
+  labs(title='Temperatures in Auckland',
+       subtitle='Median temperatures (Fahrenheit) by month for 2016\nData: Original CSV from the Weather Underground', x = "Mean Tempterature [ºF]")
+
+ggplot(auc_2016, aes(x = avg_temp, y = `months`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, gradient_lwd = 1.) +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_fill_viridis(name = "Temp. [ºF]", option = "C") +
+  labs(title = 'Temperatures in Auckland',
+       subtitle = 'Mean temperatures (Fahrenheit) by month for 2016\nData: Original CSV from the Weather Underground', 
+       x = "Mean Temperature") +
+  theme_ridges(font_size = 13, grid = TRUE) + theme(axis.title.y = element_blank())
+
+#AUCKLAND_17
+months <- c("December","November","October","September","August","July","June","May","April","March","February","January") ## need this string vector for sorting later
+auc_2017=data.frame(csdata[c(367:731),c(5,7,8,9)])
+auc_2017$date=as.Date(auc_2017$date)
+auc_2017$months <- as.Date(auc_2017$date, format = "%d-%b-%y") %>%
+  months() %>%
+  as.factor() %>%
+  factor(., levels = months)
+
+#scales
+mins <- min(auc_2017$low_temp)
+maxs <- max(auc_2017$high_temp)
+
+## black and white
+ggplot(auc_2017,aes(x = avg_temp,y=months,height=..density..))+
+  geom_joy(scale=3) +
+  scale_x_continuous(limits = c(mins,maxs))+
+  theme_ipsum(grid=F)+
+  theme(axis.title.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        strip.text.y = element_text(angle = 180, hjust = 1))+
+  labs(title='Temperatures in Auckland_17',
+       subtitle='Median temperatures (Fahrenheit) by month for 2017\nData: Original CSV from the Weather Underground', x = "Mean Tempterature [ºF]")
+
+ggplot(auc_2017, aes(x = avg_temp, y = `months`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, gradient_lwd = 1.) +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_fill_viridis(name = "Temp. [ºF]", option = "C") +
+  labs(title = 'Temperatures in Auckland_17',
+       subtitle = 'Mean temperatures (Fahrenheit) by month for 2017\nData: Original CSV from the Weather Underground', 
+       x = "Mean Temperature") +
+  theme_ridges(font_size = 13, grid = TRUE) + theme(axis.title.y = element_blank())
+```
+
+###########
+MUMBAI
+##########
+```{r}
+par(mfrow=c(2,2))
+library(viridis)     ## color palette
+library(ggjoy)       ## ridges
+library(hrbrthemes)  ## plot theme
+library(ggplot2)
+#MUMBAI_16
+months <- c("December","November","October","September","August","July","June","May","April","March","February","January") ## need this string vector for sorting later
+mum_2016=data.frame(csdata[c(732:1097),c(5,7,8,9)])
+mum_2016$date=as.Date(mum_2016$date)
+mum_2016$months <- as.Date(mum_2016$date, format = "%d-%b-%y") %>%
+  months() %>%
+  as.factor() %>%
+  factor(., levels = months)
+
+#scales
+mins <- min(mum_2016$low_temp)
+maxs <- max(mum_2016$high_temp)
+
+## black and white
+ggplot(mum_2016,aes(x = avg_temp,y=months,height=..density..))+
+  geom_joy(scale=3) +
+  scale_x_continuous(limits = c(mins,maxs))+
+  theme_ipsum(grid=F)+
+  theme(axis.title.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        strip.text.y = element_text(angle = 180, hjust = 1))+
+  labs(title='Temperatures in Mumbai_16',
+       subtitle='Median temperatures (Fahrenheit) by month for 2016\nData: Original CSV from the Weather Underground', x = "Mean Tempterature [ºF]")
+
+ggplot(mum_2016, aes(x = avg_temp, y = `months`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, gradient_lwd = 1.) +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_fill_viridis(name = "Temp. [ºF]", option = "C") +
+  labs(title = 'Temperatures in Mumbai_16',
+       subtitle = 'Mean temperatures (Fahrenheit) by month for 2016\nData: Original CSV from the Weather Underground', 
+       x = "Mean Temperature") +
+  theme_ridges(font_size = 13, grid = TRUE) + theme(axis.title.y = element_blank())
+
+#MUMBAI_17
+months <- c("December","November","October","September","August","July","June","May","April","March","February","January") ## need this string vector for sorting later
+mum_2017=data.frame(csdata[c(1098:1462),c(5,7,8,9)])
+mum_2017$date=as.Date(mum_2017$date)
+mum_2017$months <- as.Date(mum_2017$date, format = "%d-%b-%y") %>%
+  months() %>%
+  as.factor() %>%
+  factor(., levels = months)
+
+#scales
+mins <- min(mum_2017$low_temp)
+maxs <- max(mum_2017$high_temp)
+
+## black and white
+ggplot(mum_2017,aes(x = avg_temp,y=months,height=..density..))+
+  geom_joy(scale=3) +
+  scale_x_continuous(limits = c(mins,maxs))+
+  theme_ipsum(grid=F)+
+  theme(axis.title.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        strip.text.y = element_text(angle = 180, hjust = 1))+
+  labs(title='Temperatures in Mumbai_17',
+       subtitle='Median temperatures (Fahrenheit) by month for 2017\nData: Original CSV from the Weather Underground', x = "Mean Tempterature [ºF]")
+
+ggplot(mum_2017, aes(x = avg_temp, y = `months`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, gradient_lwd = 1.) +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_fill_viridis(name = "Temp. [ºF]", option = "C") +
+  labs(title = 'Temperatures in Mumbai_17',
+       subtitle = 'Mean temperatures (Fahrenheit) by month for 2017\nData: Original CSV from the Weather Underground', 
+       x = "Mean Temperature") +
+  theme_ridges(font_size = 13, grid = TRUE) + theme(axis.title.y = element_blank())
+```
+
+###########
+BEIJING
+##########
+```{r}
+par(mfrow=c(2,2))
+library(viridis)     ## color palette
+library(ggjoy)       ## ridges
+library(hrbrthemes)  ## plot theme
+library(ggplot2)
+#BEIJING_16
+months <- c("December","November","October","September","August","July","June","May","April","March","February","January") ## need this string vector for sorting later
+bei_2016=data.frame(csdata[c(1463:1828),c(5,7,8,9)])
+bei_2016$date=as.Date(bei_2016$date)
+bei_2016$months <- as.Date(bei_2016$date, format = "%d-%b-%y") %>%
+  months() %>%
+  as.factor() %>%
+  factor(., levels = months)
+
+#scales
+mins <- min(bei_2016$low_temp)
+maxs <- max(bei_2016$high_temp)
+
+## black and white
+ggplot(bei_2016,aes(x = avg_temp,y=months,height=..density..))+
+  geom_joy(scale=3) +
+  scale_x_continuous(limits = c(mins,maxs))+
+  theme_ipsum(grid=F)+
+  theme(axis.title.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        strip.text.y = element_text(angle = 180, hjust = 1))+
+  labs(title='Temperatures in Beijing_16',
+       subtitle='Median temperatures (Fahrenheit) by month for 2016\nData: Original CSV from the Weather Underground', x = "Mean Tempterature [ºF]")
+
+ggplot(bei_2016, aes(x = avg_temp, y = `months`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, gradient_lwd = 1.) +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_fill_viridis(name = "Temp. [ºF]", option = "C") +
+  labs(title = 'Temperatures in Beijing',
+       subtitle = 'Mean temperatures (Fahrenheit) by month for 2016\nData: Original CSV from the Weather Underground', 
+       x = "Mean Temperature") +
+  theme_ridges(font_size = 13, grid = TRUE) + theme(axis.title.y = element_blank())
+
+#BEIJING_17
+months <- c("December","November","October","September","August","July","June","May","April","March","February","January") ## need this string vector for sorting later
+bei_2017=data.frame(csdata[c(1829:2193),c(5,7,8,9)])
+bei_2017$date=as.Date(bei_2017$date)
+bei_2017$months <- as.Date(bei_2017$date, format = "%d-%b-%y") %>%
+  months() %>%
+  as.factor() %>%
+  factor(., levels = months)
+
+#scales
+mins <- min(bei_2017$low_temp)
+maxs <- max(bei_2017$high_temp)
+
+## black and white
+ggplot(bei_2017,aes(x = avg_temp,y=months,height=..density..))+
+  geom_joy(scale=3) +
+  scale_x_continuous(limits = c(mins,maxs))+
+  theme_ipsum(grid=F)+
+  theme(axis.title.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        strip.text.y = element_text(angle = 180, hjust = 1))+
+  labs(title='Temperatures in Beijing_17',
+       subtitle='Median temperatures (Fahrenheit) by month for 2017\nData: Original CSV from the Weather Underground', x = "Mean Tempterature [ºF]")
+
+ggplot(bei_2017, aes(x = avg_temp, y = `months`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, gradient_lwd = 1.) +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_fill_viridis(name = "Temp. [ºF]", option = "C") +
+  labs(title = 'Temperatures in Beijing_17',
+       subtitle = 'Mean temperatures (Fahrenheit) by month for 2017\nData: Original CSV from the Weather Underground', 
+       x = "Mean Temperature") +
+  theme_ridges(font_size = 13, grid = TRUE) + theme(axis.title.y = element_blank())
+```
+
+###########
+CHICAGO
+##########
+
+```{r}
+par(mfrow=c(2,2))
+library(viridis)     ## color palette
+library(ggjoy)       ## ridges
+library(hrbrthemes)  ## plot theme
+library(ggplot2)
+#CHICAGO_16
+months <- c("December","November","October","September","August","July","June","May","April","March","February","January") ## need this string vector for sorting later
+chi_2016=data.frame(csdata[c(2194:25599),c(5,7,8,9)])
+chi_2016$date=as.Date(chi_2016$date)
+chi_2016$months <- as.Date(chi_2016$date, format = "%d-%b-%y") %>%
+  months() %>%
+  as.factor() %>%
+  factor(., levels = months)
+
+#scales
+mins <- min(chi_2016$low_temp)
+maxs <- max(chi_2016$high_temp)
+
+## black and white
+ggplot(chi_2016,aes(x = avg_temp,y=months,height=..density..))+
+  geom_joy(scale=3) +
+  scale_x_continuous(limits = c(mins,maxs))+
+  theme_ipsum(grid=F)+
+  theme(axis.title.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        strip.text.y = element_text(angle = 180, hjust = 1))+
+  labs(title='Temperatures in Chicago_16',
+       subtitle='Median temperatures (Fahrenheit) by month for 2016\nData: Original CSV from the Weather Underground', x = "Mean Tempterature [ºF]")
+
+ggplot(chi_2016, aes(x = avg_temp, y = `months`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, gradient_lwd = 1.) +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_fill_viridis(name = "Temp. [ºF]", option = "C") +
+  labs(title = 'Temperatures in Chicago_16',
+       subtitle = 'Mean temperatures (Fahrenheit) by month for 2016\nData: Original CSV from the Weather Underground', 
+       x = "Mean Temperature") +
+  theme_ridges(font_size = 13, grid = TRUE) + theme(axis.title.y = element_blank())
+
+#CHICAGO_17
+months <- c("December","November","October","September","August","July","June","May","April","March","February","January") ## need this string vector for sorting later
+chi_2017=data.frame(csdata[c(2560:2924),c(5,7,8,9)])
+chi_2017$date=as.Date(chi_2017$date)
+chi_2017$months <- as.Date(chi_2017$date, format = "%d-%b-%y") %>%
+  months() %>%
+  as.factor() %>%
+  factor(., levels = months)
+
+#scales
+mins <- min(chi_2017$low_temp)
+maxs <- max(chi_2017$high_temp)
+
+## black and white
+ggplot(chi_2017,aes(x = avg_temp,y=months,height=..density..))+
+  geom_joy(scale=3) +
+  scale_x_continuous(limits = c(mins,maxs))+
+  theme_ipsum(grid=F)+
+  theme(axis.title.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        strip.text.y = element_text(angle = 180, hjust = 1))+
+  labs(title='Temperatures in Chicago_17',
+       subtitle='Median temperatures (Fahrenheit) by month for 2017\nData: Original CSV from the Weather Underground', x = "Mean Tempterature [ºF]")
+
+ggplot(chi_2017, aes(x = avg_temp, y = `months`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, gradient_lwd = 1.) +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_fill_viridis(name = "Temp. [ºF]", option = "C") +
+  labs(title = 'Temperatures in Chicago_17',
+       subtitle = 'Mean temperatures (Fahrenheit) by month for 2017\nData: Original CSV from the Weather Underground', 
+       x = "Mean Temperature") +
+  theme_ridges(font_size = 13, grid = TRUE) + theme(axis.title.y = element_blank())
+```
+
+############
+SAN DIEGO
+###########
+```{r}
+par(mfrow=c(2,2))
+library(viridis)     ## color palette
+library(ggjoy)       ## ridges
+library(hrbrthemes)  ## plot theme
+library(ggplot2)
+#SAN DIEGO_16
+months <- c("December","November","October","September","August","July","June","May","April","March","February","January") ## need this string vector for sorting later
+san_2016=data.frame(csdata[c(2925:3290),c(5,7,8,9)])
+san_2016$date=as.Date(san_2016$date)
+san_2016$months <- as.Date(san_2016$date, format = "%d-%b-%y") %>%
+  months() %>%
+  as.factor() %>%
+  factor(., levels = months)
+
+#scales
+mins <- min(san_2016$low_temp)
+maxs <- max(san_2016$high_temp)
+
+## black and white
+ggplot(san_2016,aes(x = avg_temp,y=months,height=..density..))+
+  geom_joy(scale=3) +
+  scale_x_continuous(limits = c(mins,maxs))+
+  theme_ipsum(grid=F)+
+  theme(axis.title.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        strip.text.y = element_text(angle = 180, hjust = 1))+
+  labs(title='Temperatures in SanDiego_16',
+       subtitle='Median temperatures (Fahrenheit) by month for 2016\nData: Original CSV from the Weather Underground', x = "Mean Tempterature [ºF]")
+
+ggplot(san_2016, aes(x = avg_temp, y = `months`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, gradient_lwd = 1.) +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_fill_viridis(name = "Temp. [ºF]", option = "C") +
+  labs(title = 'Temperatures in Sandiego_16',
+       subtitle = 'Mean temperatures (Fahrenheit) by month for 2016\nData: Original CSV from the Weather Underground', 
+       x = "Mean Temperature") +
+  theme_ridges(font_size = 13, grid = TRUE) + theme(axis.title.y = element_blank())
+
+#SAN DIEGO_17
+months <- c("December","November","October","September","August","July","June","May","April","March","February","January") ## need this string vector for sorting later
+san_2017=data.frame(csdata[c(3291:3655),c(5,7,8,9)])
+san_2017$date=as.Date(san_2017$date)
+san_2017$months <- as.Date(san_2017$date, format = "%d-%b-%y") %>%
+  months() %>%
+  as.factor() %>%
+  factor(., levels = months)
+
+#scales
+mins <- min(san_2017$low_temp)
+maxs <- max(san_2017$high_temp)
+
+## black and white
+ggplot(san_2017,aes(x = avg_temp,y=months,height=..density..))+
+  geom_joy(scale=3) +
+  scale_x_continuous(limits = c(mins,maxs))+
+  theme_ipsum(grid=F)+
+  theme(axis.title.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        strip.text.y = element_text(angle = 180, hjust = 1))+
+  labs(title='Temperatures in SanDiego_17',
+       subtitle='Median temperatures (Fahrenheit) by month for 2017\nData: Original CSV from the Weather Underground', x = "Mean Tempterature [ºF]")
+
+ggplot(san_2017, aes(x = avg_temp, y = `months`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, gradient_lwd = 1.) +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_fill_viridis(name = "Temp. [ºF]", option = "C") +
+  labs(title = 'Temperatures in SanDiego_17',
+       subtitle = 'Mean temperatures (Fahrenheit) by month for 2017\nData: Original CSV from the Weather Underground', 
+       x = "Mean Temperature") +
+  theme_ridges(font_size = 13, grid = TRUE) + theme(axis.title.y = element_blank())
+```
